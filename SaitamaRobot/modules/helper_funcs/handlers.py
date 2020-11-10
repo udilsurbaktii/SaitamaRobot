@@ -49,11 +49,10 @@ class AntiSpam:
 SpamChecker = AntiSpam()
 
 class CustomCallbackQueryHandler(CallbackQueryHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self ,run_async=True, *args, **kwargs):
+        super().__init__(*args, run_async=run_async, **kwargs)
 
 class CustomCommandHandler(CommandHandler):
-
     def __init__(self,
                  command,
                  callback,
@@ -121,21 +120,15 @@ class CustomCommandHandler(CommandHandler):
                 context.update(check_result[1])
 
 
-class CustomRegexHandler(RegexHandler):
-
-    def __init__(self, pattern, callback, friendly="", **kwargs):
-        super().__init__(pattern, callback, **kwargs)
-
-
 class CustomMessageHandler(MessageHandler):
-
     def __init__(self,
                  filters,
                  callback,
                  friendly="",
+                 run_async=True,
                  allow_edit=False,
                  **kwargs):
-        super().__init__(filters, callback, **kwargs)
+        super().__init__(filters, callback, run_async=run_async, **kwargs)
         if allow_edit is False:
             self.filters &= ~(
                 Filters.update.edited_message
