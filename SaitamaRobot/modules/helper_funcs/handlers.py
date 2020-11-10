@@ -1,12 +1,12 @@
-import SaitamaRobot.modules.sql.blacklistusers_sql as sql
-from SaitamaRobot import ALLOW_EXCL
-from SaitamaRobot import (DEV_USERS, DRAGONS, DEMONS, TIGERS, WOLVES)
-
-from telegram import MessageEntity, Update
-from telegram.ext import CommandHandler, MessageHandler, RegexHandler, Filters
 from time import sleep
-from pyrate_limiter import (BucketFullException, Duration, RequestRate, Limiter,
-                            MemoryListBucket)
+
+import SaitamaRobot.modules.sql.blacklistusers_sql as sql
+from pyrate_limiter import (BucketFullException, Duration, Limiter,
+                            MemoryListBucket, RequestRate)
+from SaitamaRobot import ALLOW_EXCL, DEMONS, DEV_USERS, DRAGONS, TIGERS, WOLVES
+from telegram import MessageEntity, Update
+from telegram.ext import (CallbackQueryHandler, CommandHandler, Filters,
+                          MessageHandler, RegexHandler)
 
 if ALLOW_EXCL:
     CMD_STARTERS = ('/', '!')
@@ -48,6 +48,9 @@ class AntiSpam:
 
 SpamChecker = AntiSpam()
 
+class CustomCallbackQueryHandler(CallbackQueryHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 class CustomCommandHandler(CommandHandler):
 
