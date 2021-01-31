@@ -1,10 +1,10 @@
 import random, html
 
-from SaitamaRobot import dispatcher
-from SaitamaRobot.modules.disable import (DisableAbleCommandHandler,
+from AstrakoBot import dispatcher
+from AstrakoBot.modules.disable import (DisableAbleCommandHandler,
                                           DisableAbleMessageHandler)
-from SaitamaRobot.modules.sql import afk_sql as sql
-from SaitamaRobot.modules.users import get_user_id
+from AstrakoBot.modules.sql import afk_sql as sql
+from AstrakoBot.modules.users import get_user_id
 from telegram import MessageEntity, Update
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext, Filters, MessageHandler, run_async
@@ -29,14 +29,14 @@ def afk(update: Update, context: CallbackContext):
         reason = args[1]
         if len(reason) > 100:
             reason = reason[:100]
-            notice = "\nYour afk reason was shortened to 100 characters."
+            notice = "\nYour sibuk reason was shortened to 100 characters."
     else:
         reason = ""
 
     sql.set_afk(update.effective_user.id, reason)
     fname = update.effective_user.first_name
     try:
-        update.effective_message.reply_text("{} is now away!{}".format(
+        update.effective_message.reply_text("{} gii ngentot kampang!{}".format(
             fname, notice))
     except BadRequest:
         pass
@@ -57,9 +57,9 @@ def no_longer_afk(update: Update, context: CallbackContext):
         firstname = update.effective_user.first_name
         try:
             options = [
-                '{} is here!', '{} is back!', '{} is now in the chat!',
-                '{} is awake!', '{} is back online!', '{} is finally here!',
-                'Welcome back! {}', 'Where is {}?\nIn the chat!'
+                '{} wah pasti abis ngentot!', '{} is back!', '{} ngentot terus gblk!',
+                '{} bagi pap tt om!', '{} si anjing balik lagi!', '{} si goblok sok sibuk!',
+                'Welcome back anak kampang! {}', 'kemana si {}?\nPasti abis parming pap tt!'
             ]
             chosen_option = random.choice(options)
             update.effective_message.reply_text(chosen_option.format(firstname))
@@ -142,7 +142,7 @@ When marked as AFK, any mentions will be replied to with a message to say you're
 
 AFK_HANDLER = DisableAbleCommandHandler("afk", afk)
 AFK_REGEX_HANDLER = DisableAbleMessageHandler(
-    Filters.regex(r"^brb(.*)$"), afk, friendly="afk")
+    Filters.regex(r"^(?i)brb(.*)$"), afk, friendly="afk")
 NO_AFK_HANDLER = MessageHandler(Filters.all & Filters.group, no_longer_afk)
 AFK_REPLY_HANDLER = MessageHandler(Filters.all & Filters.group, reply_afk)
 
