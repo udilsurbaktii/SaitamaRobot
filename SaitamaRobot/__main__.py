@@ -1,18 +1,17 @@
 import importlib
-import html
 import time
 import re
 from sys import argv
 from typing import Optional
 
-from SaitamaRobot import (ALLOW_EXCL, CERT_PATH, DONATION_LINK, LOGGER,
+from AstrakoBot import (ALLOW_EXCL, CERT_PATH, DONATION_LINK, LOGGER,
                           OWNER_ID, PORT, SUPPORT_CHAT, TOKEN, URL, WEBHOOK,
-                          dispatcher, StartTime, telethn, updater)
+                          SUPPORT_CHAT, dispatcher, StartTime, telethn, updater)
 # needed to dynamically load modules
 # NOTE: Module order is not guaranteed, specify that in the config file!
-from SaitamaRobot.modules import ALL_MODULES
-from SaitamaRobot.modules.helper_funcs.chat_status import is_user_admin
-from SaitamaRobot.modules.helper_funcs.misc import paginate_modules
+from AstrakoBot.modules import ALL_MODULES
+from AstrakoBot.modules.helper_funcs.chat_status import is_user_admin
+from AstrakoBot.modules.helper_funcs.misc import paginate_modules
 from telegram import (InlineKeyboardButton, InlineKeyboardMarkup, ParseMode,
                       Update)
 from telegram.error import (BadRequest, ChatMigrated, NetworkError,
@@ -52,36 +51,45 @@ def get_readable_time(seconds: int) -> str:
 
 
 PM_START_TEXT = """
-Hi {}, my name is {}! 
-I am an Anime themed group management bot.
-Build by weebs for weebs, I specialize in managing anime and similar themed groups.
-You can find my list of available commands with /help.
+
+Hi {}, nama saya {}!
+Saya adalah robot yang bisa memecahkan biji peler mu. 
+Saya ada untuk membantai para parasit telegram.
+Dibuat khusus untuk memberantas jamet tele kampang yang meresahkan.
+Saya hanya robot tapi juga bisa sange, jangan lupa pap tt ya asu!!
+━─━─━─━─━─━─━─━─━─━─━
+
+▪**Managed with by:** [KOALA🐨](https://t.me/detzcaius)
+▪**JOIN MY CH OFFICIAL:** [CTH](http://t.me/caripasangangrup)
+
+━─━─━─━─━─━─━─━─━─━─━
+Tekan /help untuk melihat daftar fitur saya.
 """
 
 HELP_STRINGS = """
-Hey there! My name is *{}*.
-I'm a Hero For Fun and help admins manage their groups with One Punch! Have a look at the following for an idea of some of \
-the things I can help you with.
+Hai! Nama saya adalah *{}*.
+Saya adalah manusia robot dengan beberapa kelebihan yang menyenangkan! Silahkan lihat berikut ini untuk beberapa ide dari \
+hal-hal yang bisa saya bantu.
 
-*Main* commands available:
- • /help: PM's you this message.
- • /help <module name>: PM's you info about that module.
- • /donate: information on how to donate!
- • /settings:
-   • in PM: will send you your settings for all supported modules.
-   • in a group: will redirect you to pm, with all that chat's settings.
-
+*Perintah utama* yang tersedia:
+ - /start: mulai bot
+ - /help: PM Anda dengan pesan ini.
+ - /help <module name>: PM Anda dengan info tentang modul itu.
+ - /donate: informasi tentang cara menyumbang!
+ - /settings:
+   - di PM: akan mengirimkan pengaturan Anda untuk semua modul yang didukung.
+   - di grup: akan mengarahkan Anda ke pm, dengan semua pengaturan obrolan itu.
 
 {}
-And the following:
+Dan berikut ini:
 """.format(
     dispatcher.bot.first_name, ""
     if not ALLOW_EXCL else "\nAll commands can either be used with / or !.\n")
 
-SAITAMA_IMG = "https://telegra.ph/file/46e6d9dfcb3eb9eae95d9.jpg"
+ASTRAKOBOT_IMG = "https://i.ibb.co/9gqtY04/IMG-20210129-004109-607.jpg"
 
 DONATE_STRING = """Heya, glad to hear you want to donate!
-Saitama is hosted on one of Kaizoku's Servers and doesn't require any donations as of now but \
+AstrakoBot is hosted on its own server and doesn't require any donations as of now but \
 You can donate to the original writer of the Base code, Paul
 There are two ways of supporting him; [PayPal](paypal.me/PaulSonOfLars), or [Monzo](monzo.me/paulnionvestergaardlarsen)."""
 
@@ -96,7 +104,7 @@ CHAT_SETTINGS = {}
 USER_SETTINGS = {}
 
 for module_name in ALL_MODULES:
-    imported_module = importlib.import_module("SaitamaRobot.modules." +
+    imported_module = importlib.import_module("AstrakoBot.modules." +
                                               module_name)
     if not hasattr(imported_module, "__mod_name__"):
         imported_module.__mod_name__ = imported_module.__name__
@@ -192,7 +200,7 @@ def start(update: Update, context: CallbackContext):
         else:
             first_name = update.effective_user.first_name
             update.effective_message.reply_photo(
-                SAITAMA_IMG,
+                ASTRAKOBOT_IMG,
                 PM_START_TEXT.format(
                     escape_markdown(first_name),
                     escape_markdown(context.bot.first_name)),
@@ -201,31 +209,28 @@ def start(update: Update, context: CallbackContext):
                 reply_markup=InlineKeyboardMarkup(
                     [[
                         InlineKeyboardButton(
-                            text="☑️ Add Saitama to your group",
+                            text="🤖 Add Saya ke group",
                             url="t.me/{}?startgroup=true".format(
                                 context.bot.username))
                     ],
                      [
                          InlineKeyboardButton(
-                             text="🚑 Support Group",
-                             url=f"https://t.me/{SUPPORT_CHAT}"),
+                             text="👥 CTH Grup",
+                             url=f"https://t.me/caritemanhidop"),
+                     
                          InlineKeyboardButton(
-                             text="🔔 Updates Channel",
-                             url="https://t.me/OnePunchUpdates")
+                             text="🍭 Help & Command",
+                             url=f"t.me/{dispatcher.bot.username}?start=help")
                      ],
                      [
                          InlineKeyboardButton(
-                             text="🧾 Getting started guide",
-                             url="https://t.me/OnePunchUpdates/29")
-                     ],
-                     [
-                         InlineKeyboardButton(
-                             text="🗄 Source code",
-                             url="https://github.com/AnimeKaizoku/SaitamaRobot")
+                             text="🚫 Gban Logs",
+                             url="https://t.me/joinchat/SKYP-Hv8tqZ-UvYq")
                      ]]))
     else:
         update.effective_message.reply_text(
-            "I'm online!\n<b>Up since:</b> <code>{}</code>".format(uptime),
+            "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>"
+            .format(uptime),
             parse_mode=ParseMode.HTML)
 
 
@@ -539,6 +544,16 @@ def migrate_chats(update: Update, context: CallbackContext):
 
 
 def main():
+
+    if SUPPORT_CHAT is not None and isinstance(SUPPORT_CHAT, str):
+        try:
+            dispatcher.bot.sendMessage(f"@{SUPPORT_CHAT}", "I am now online!")
+        except Unauthorized:
+            LOGGER.warning(
+                "Bot isnt able to send message to support_chat, go and check!")
+        except BadRequest as e:
+            LOGGER.warning(e.message)
+
     test_handler = CommandHandler("test", test)
     start_handler = CommandHandler("start", start)
 
@@ -590,4 +605,4 @@ def main():
 if __name__ == '__main__':
     LOGGER.info("Successfully loaded modules: " + str(ALL_MODULES))
     telethn.start(bot_token=TOKEN)
-    main()
+    main())
